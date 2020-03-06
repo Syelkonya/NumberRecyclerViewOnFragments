@@ -17,12 +17,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/standart_margin"
         android:backgroundTint="@color/colorPrimary"
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_add_white_24dp"
         android:transitionName="fab_shared_transition"
-        app:borderWidth="0dp" />
+        app:borderWidth="@dimen/zero" />
 
 </RelativeLayout>

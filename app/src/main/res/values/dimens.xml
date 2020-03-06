@@ -4,4 +4,6 @@
     <dimen name="min_padding">8dp</dimen>
     <dimen name="big_text_size">48sp</dimen>
     <dimen name="enormous_text_size">200sp</dimen>
+    <dimen name="standart_margin">16dp</dimen>
+    <dimen name="zero">0dp</dimen>
 </resources>
