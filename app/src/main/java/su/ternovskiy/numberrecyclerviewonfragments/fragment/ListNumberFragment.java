@@ -2,7 +2,6 @@ package su.ternovskiy.numberrecyclerviewonfragments.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import su.ternovskiy.numberrecyclerviewonfragments.adapter.NumberAdapter;
@@ -28,11 +26,12 @@ import su.ternovskiy.numberrecyclerviewonfragments.data.NumberProvider;
 
 public class ListNumberFragment extends Fragment {
 
-    private static final String ARRAY_LIST = "ARRAY_LIST";
+    private static final String NUMBERS_COUNT = "NUMBERS_COUNT";
     private List<Number> mNumberList;
     private final NumberProvider mNumberProvider = new NumberProvider();
     private NumberAdapter mNumberAdapter;
     private RecyclerView mRecyclerView;
+    private int mNumbersCount = 100;
     private final OnNumberClickListener mOnNumberClickListener = (number) ->
             requireActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.root, NumberShowFragment.newInstance(number))
@@ -60,7 +59,8 @@ public class ListNumberFragment extends Fragment {
         initRecyclerView();
 
         if (savedInstanceState != null){
-            mNumberList = savedInstanceState.getParcelableArrayList(ARRAY_LIST);
+            mNumbersCount = savedInstanceState.getInt(NUMBERS_COUNT);
+            mNumberList = mNumberProvider.getNumberList(mNumbersCount);
             mNumberAdapter.setNumberList(mNumberList);
         }
 
@@ -69,6 +69,7 @@ public class ListNumberFragment extends Fragment {
             Number number = new Number(nextNumber, (nextNumber % 2 == 0) ? Color.RED : Color.BLUE);
             mNumberList.add(number);
             mNumberAdapter.notifyDataSetChanged();
+            mNumbersCount++;
         });
     }
 
@@ -96,7 +97,8 @@ public class ListNumberFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(ARRAY_LIST, (ArrayList<? extends Parcelable>) mNumberList);
+        outState.putInt(NUMBERS_COUNT, mNumbersCount);
+
     }
 
 }

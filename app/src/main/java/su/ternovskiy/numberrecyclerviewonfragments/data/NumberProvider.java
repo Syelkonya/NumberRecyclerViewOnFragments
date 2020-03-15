@@ -20,4 +20,13 @@ public class NumberProvider {
         return mNumberList;
     }
 
+
+    public List<Number> getNumberList(int savedInstanceNumber) {
+        for(int i = 101; i <= savedInstanceNumber; i++){
+            mNumberList.add(new Number(i,(i % 2 == 0) ? Color.RED : Color.BLUE));
+        }
+        return mNumberList;
+    }
+
+
 }

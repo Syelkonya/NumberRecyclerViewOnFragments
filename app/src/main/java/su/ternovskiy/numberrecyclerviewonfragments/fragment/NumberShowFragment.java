@@ -17,7 +17,7 @@ public class NumberShowFragment extends Fragment {
 
     private static final String ARG_NUMBER = "ARG_NUMBER";
 
-    public static NumberShowFragment newInstance(@NonNull Number number) {
+    static NumberShowFragment newInstance(@NonNull Number number) {
         NumberShowFragment fragment = new NumberShowFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_NUMBER, number);
@@ -42,10 +42,5 @@ public class NumberShowFragment extends Fragment {
             showNumberTextView.setText(numberString);
             showNumberTextView.setTextColor(number.getNumberColor());
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 }
