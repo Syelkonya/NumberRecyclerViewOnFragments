@@ -1,12 +1,15 @@
 package su.ternovskiy.numberrecyclerviewonfragments;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 
+import su.ternovskiy.numberrecyclerviewonfragments.data.Number;
 import su.ternovskiy.numberrecyclerviewonfragments.fragment.ListNumberFragment;
+import su.ternovskiy.numberrecyclerviewonfragments.fragment.NumberShowFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NumberRouter {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,5 +20,13 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.root, ListNumberFragment.newInstance())
                     .commit();
         }
+    }
+
+    @Override
+    public void openNumberShowFragment(@NonNull Number number) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.root, NumberShowFragment.newInstance(number))
+                .addToBackStack(null)
+                .commit();
     }
 }

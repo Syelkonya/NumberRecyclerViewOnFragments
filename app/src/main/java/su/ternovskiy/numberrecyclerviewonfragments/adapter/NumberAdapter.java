@@ -27,7 +27,6 @@ public class NumberAdapter extends Adapter<NumberAdapter.NumberViewHolder> {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.number_item, parent, false);
         return new NumberViewHolder(view);
-
     }
 
     @Override

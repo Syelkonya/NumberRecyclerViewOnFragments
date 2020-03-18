@@ -17,7 +17,7 @@ public class NumberShowFragment extends Fragment {
 
     private static final String ARG_NUMBER = "ARG_NUMBER";
 
-    static NumberShowFragment newInstance(@NonNull Number number) {
+    public static NumberShowFragment newInstance(@NonNull Number number) {
         NumberShowFragment fragment = new NumberShowFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_NUMBER, number);

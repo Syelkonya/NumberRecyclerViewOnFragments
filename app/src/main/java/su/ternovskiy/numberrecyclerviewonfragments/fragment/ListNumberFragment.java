@@ -1,5 +1,6 @@
 package su.ternovskiy.numberrecyclerviewonfragments.fragment;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+import su.ternovskiy.numberrecyclerviewonfragments.NumberRouter;
 import su.ternovskiy.numberrecyclerviewonfragments.adapter.NumberAdapter;
 import su.ternovskiy.numberrecyclerviewonfragments.adapter.OnNumberClickListener;
 import su.ternovskiy.numberrecyclerviewonfragments.R;
@@ -28,19 +30,29 @@ public class ListNumberFragment extends Fragment {
 
     private static final String NUMBERS_COUNT = "NUMBERS_COUNT";
     private List<Number> mNumberList;
-    private final NumberProvider mNumberProvider = new NumberProvider();
-    private NumberAdapter mNumberAdapter;
+
     private RecyclerView mRecyclerView;
     private int mNumbersCount = 100;
-    private final OnNumberClickListener mOnNumberClickListener = (number) ->
-            requireActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.root, NumberShowFragment.newInstance(number))
-                    .addToBackStack(NumberShowFragment.class.getSimpleName())
-                    .commit();
-
+    private NumberRouter mNumberRouter;
+    private final NumberProvider mNumberProvider = new NumberProvider();
+    private final NumberAdapter mNumberAdapter = new NumberAdapter();
+    private final OnNumberClickListener mOnNumberClickListener = number ->
+            mNumberRouter.openNumberShowFragment(number);
 
     public static Fragment newInstance() {
         return new ListNumberFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mNumberList = mNumberProvider.getNumberList();
+
+        if (savedInstanceState != null){
+            mNumbersCount = savedInstanceState.getInt(NUMBERS_COUNT);
+            mNumberList = mNumberProvider.getNumberList(mNumbersCount);
+            mNumberAdapter.setNumberList(mNumberList);
+        }
     }
 
     @Nullable
@@ -49,20 +61,12 @@ public class ListNumberFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_numbers, container, false);
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = view.findViewById(R.id.number_list_recycler_view);
         FloatingActionButton floatingActionButton = view.findViewById(R.id.number_list_fab);
-        mNumberList = mNumberProvider.getNumberList();
         initRecyclerView();
-
-        if (savedInstanceState != null){
-            mNumbersCount = savedInstanceState.getInt(NUMBERS_COUNT);
-            mNumberList = mNumberProvider.getNumberList(mNumbersCount);
-            mNumberAdapter.setNumberList(mNumberList);
-        }
 
         floatingActionButton.setOnClickListener(v -> {
             int nextNumber = mNumberAdapter.getItemCount() + 1;
@@ -73,16 +77,19 @@ public class ListNumberFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mNumberRouter = (NumberRouter) context;
+    }
 
     private void initRecyclerView() {
-
         LinearLayoutManager linearLayoutManager =
                 new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false);
         int quantityOfColumns = getResources().getInteger(R.integer.column_quantity);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), quantityOfColumns);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setLayoutManager(gridLayoutManager);
-        mNumberAdapter = new NumberAdapter();
         mNumberAdapter.setNumberList(mNumberList);
         mNumberAdapter.setNumberClickListener(mOnNumberClickListener);
         DividerItemDecoration dividerItemDecoration =
@@ -98,7 +105,5 @@ public class ListNumberFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(NUMBERS_COUNT, mNumbersCount);
-
     }
-
 }
