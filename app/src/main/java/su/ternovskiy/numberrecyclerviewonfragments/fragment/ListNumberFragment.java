@@ -47,6 +47,8 @@ public class ListNumberFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mNumberList = mNumberProvider.getNumberList();
+        mNumberAdapter.setNumberList(mNumberList);
+        mNumberAdapter.setNumberClickListener(mOnNumberClickListener);
 
         if (savedInstanceState != null){
             mNumbersCount = savedInstanceState.getInt(NUMBERS_COUNT);
@@ -90,8 +92,6 @@ public class ListNumberFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), quantityOfColumns);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setLayoutManager(gridLayoutManager);
-        mNumberAdapter.setNumberList(mNumberList);
-        mNumberAdapter.setNumberClickListener(mOnNumberClickListener);
         DividerItemDecoration dividerItemDecoration =
                 new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         DividerItemDecoration dividerItemDecorationHorizontal =
